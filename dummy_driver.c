@@ -39,11 +39,14 @@ static int dummy_init(void)
 static void dummy_exit(void)
 {
 	printk(KERN_INFO "dummy_driver - Uninitializing\n");
+	// Cancel any pending or running delayed work
+    cancel_delayed_work_sync(&dw);
 	//destroy workqueue
 	if(wq)
 	{
 		destroy_workqueue(wq);
 	}
+	// Unregister the character device
 	unregister_chrdev(major, "dummy_driver");
 }
 
